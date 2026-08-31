@@ -39,3 +39,14 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+# Backups viejos que quedan por `expo prebuild --clean` (~1.8 GB c/u).
+/android.bak
+/ios.bak
+
+# APKs y archivos sensibles generados localmente
+builds/
+credentials.json
+keystore.env
+
+# Claude skills locales
+.claude/

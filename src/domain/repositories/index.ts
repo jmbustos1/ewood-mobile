@@ -1,0 +1,5 @@
+export type { AuthRepository, LoginParams, RegisterParams, AuthTokens } from './AuthRepository'
+export type { ScooterRepository, GetScootersParams, UnlockError } from './ScooterRepository'
+export type { TripRepository, EndTripParams } from './TripRepository'
+export type { CityRepository } from './CityRepository'
+export type { WalletRepository } from './WalletRepository'

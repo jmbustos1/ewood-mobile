@@ -1,0 +1,22 @@
+# Archivos del repo que no son necesarios para el build de la app.
+# Acelera el upload a EAS Build.
+
+docs/
+*.md
+.git/
+.vscode/
+.idea/
+
+# Carpetas nativas generadas por `expo run:android` / `run:ios` local.
+# EAS hace su propio prebuild — si las subimos, EAS usa esos archivos
+# con paths absolutos de la maquina de desarrollo (bug real vc16-18).
+android/
+android.bak/
+ios/
+ios.bak/
+
+# Artefactos que descargamos desde EAS (AABs, APKs) — no vale la pena
+# reenviarselos al servidor de build.
+builds/
+*.aab
+*.apk
