@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingVi
 import { useRouter } from 'expo-router'
 import { WebView, type WebViewNavigation } from 'react-native-webview'
 import { useWalletStore } from '../../../src/presentation/stores/walletStore'
+import { useConfigStore } from '../../../src/presentation/stores/configStore'
 import { Icon } from '../../../src/presentation/components/Icon'
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants'
 
 const MIN_RECHARGE = 1000
-const PRICE_PER_MINUTE = 150
 const QUICK_AMOUNTS = [5000, 10000, 15000]
 
 // Esquema deep-link que el backend pone como back_url en la preference MP.
@@ -21,8 +21,10 @@ export default function RechargeScreen() {
   const [resultModal, setResultModal] = useState<'success' | 'error' | 'pending' | null>(null)
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null)
 
+  const pricePerMinute = useConfigStore(s => s.config.pricing.pricePerMinuteClp)
+
   const amount = Number(amountText.replace(/\D/g, '')) || 0
-  const minutes = amount / PRICE_PER_MINUTE
+  const minutes = amount / pricePerMinute
   const isValid = amount >= MIN_RECHARGE
   const showError = amount > 0 && amount < MIN_RECHARGE
 

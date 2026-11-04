@@ -3,3 +3,4 @@ export type { ScooterRepository, GetScootersParams, UnlockError } from './Scoote
 export type { TripRepository, EndTripParams } from './TripRepository'
 export type { CityRepository } from './CityRepository'
 export type { WalletRepository } from './WalletRepository'
+export type { ConfigRepository } from './ConfigRepository'

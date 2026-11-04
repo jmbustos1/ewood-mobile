@@ -3,6 +3,7 @@ import { Stack, useRouter, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useAuthStore } from '../src/presentation/stores/authStore'
 import { useTripStore } from '../src/presentation/stores/tripStore'
+import { useConfigStore } from '../src/presentation/stores/configStore'
 import { tokenStorage } from '../src/data/storage/tokenStorage'
 
 export default function RootLayout() {
@@ -10,9 +11,14 @@ export default function RootLayout() {
   const segments = useSegments()
   const { isAuthenticated, isNewUser, loadMe } = useAuthStore()
   const { checkActiveTrip } = useTripStore()
+  const { loadConfig } = useConfigStore()
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
+    // Config pública (tarifa, versión mínima) — se dispara en paralelo al
+    // bootstrap de auth. Si falla el fetch, el store cae a los defaults
+    // embebidos y la UI no se bloquea.
+    loadConfig().catch(() => {})
     bootstrap()
   }, [])
 

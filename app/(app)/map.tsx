@@ -7,6 +7,7 @@ import { useScooterStore } from '../../src/presentation/stores/scooterStore'
 import { useTripStore } from '../../src/presentation/stores/tripStore'
 import { useWalletStore } from '../../src/presentation/stores/walletStore'
 import { useAuthStore } from '../../src/presentation/stores/authStore'
+import { useConfigStore } from '../../src/presentation/stores/configStore'
 import { useScooterSocket, type ScooterUpdate } from '../../src/data/realtime/useScooterSocket'
 import { Input } from '../../src/presentation/components/Input'
 import { Button } from '../../src/presentation/components/Button'
@@ -16,7 +17,6 @@ import { Colors, Typography, Spacing, Radius, Shadow, OSM_MAP_STYLE } from '../.
 import type { Scooter, LockState } from '../../src/domain/entities'
 
 const LOGO = require('../../assets/logo-exwood.png')
-const PRICE_PER_MINUTE = 150
 const MIN_BALANCE_FOR_BANNER = 1000
 
 function formatDuration(seconds: number) {
@@ -36,6 +36,7 @@ export default function MapScreen() {
   } = useTripStore()
   const { balance, loadWallet } = useWalletStore()
   const { user } = useAuthStore()
+  const pricePerMinute = useConfigStore(s => s.config.pricing.pricePerMinuteClp)
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
   const [locationDenied, setLocationDenied] = useState(false)
@@ -53,7 +54,7 @@ export default function MapScreen() {
   const locationSub = useRef<Location.LocationSubscription | null>(null)
 
   const initial = user?.name?.[0]?.toUpperCase() ?? '?'
-  const totalPrice = Math.round((elapsed / 60) * PRICE_PER_MINUTE)
+  const totalPrice = Math.round((elapsed / 60) * pricePerMinute)
   const showLowBalanceBanner = !activeTrip && balance < MIN_BALANCE_FOR_BANNER
 
   useEffect(() => {
@@ -338,7 +339,7 @@ export default function MapScreen() {
               <Text style={styles.btnPrimaryText}>Desbloquear</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.tariff}>Tarifa: ${PRICE_PER_MINUTE}/min</Text>
+          <Text style={styles.tariff}>Tarifa: ${pricePerMinute}/min</Text>
         </View>
       )}
 
