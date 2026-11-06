@@ -21,10 +21,10 @@ export default function RechargeScreen() {
   const [resultModal, setResultModal] = useState<'success' | 'error' | 'pending' | null>(null)
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null)
 
-  const pricePerMinute = useConfigStore(s => s.config.pricing.pricePerMinuteClp)
+  const pricing = useConfigStore(s => s.config.pricing)
 
   const amount = Number(amountText.replace(/\D/g, '')) || 0
-  const minutes = amount / pricePerMinute
+  const minutes = Math.floor(amount / (pricing.pricePerMinuteClp * (1 + pricing.taxRate)))
   const isValid = amount >= MIN_RECHARGE
   const showError = amount > 0 && amount < MIN_RECHARGE
 
@@ -107,7 +107,7 @@ export default function RechargeScreen() {
         <View style={styles.divider} />
 
         <Text style={styles.helper}>
-          Equivale a {minutes % 1 === 0 ? minutes.toFixed(0) : minutes.toFixed(1).replace('.', ',')} minutos de viaje.
+          Equivale a {minutes} minutos de viaje (IVA incl.).
         </Text>
 
         {showError && (

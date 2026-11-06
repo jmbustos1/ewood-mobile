@@ -19,6 +19,8 @@ export class TripRepositoryImpl implements TripRepository {
       trip: this.mapTrip(data.trip),
       durationFormatted: data.duration_formatted,
       distanceFormatted: data.distance_formatted,
+      minutesCharged: data.minutes_charged,
+      pricePerMinute: data.price_per_minute,
       subtotal: data.subtotal,
       taxAmount: data.tax_amount,
       taxRate: data.tax_rate,

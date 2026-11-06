@@ -8,6 +8,7 @@ import { useTripStore } from '../../src/presentation/stores/tripStore'
 import { useWalletStore } from '../../src/presentation/stores/walletStore'
 import { useAuthStore } from '../../src/presentation/stores/authStore'
 import { useConfigStore } from '../../src/presentation/stores/configStore'
+import { calculateTripCost } from '../../src/domain/usecases/calculateTripCost'
 import { useScooterSocket, type ScooterUpdate } from '../../src/data/realtime/useScooterSocket'
 import { Input } from '../../src/presentation/components/Input'
 import { Button } from '../../src/presentation/components/Button'
@@ -36,7 +37,8 @@ export default function MapScreen() {
   } = useTripStore()
   const { balance, loadWallet } = useWalletStore()
   const { user } = useAuthStore()
-  const pricePerMinute = useConfigStore(s => s.config.pricing.pricePerMinuteClp)
+  const pricing = useConfigStore(s => s.config.pricing)
+  const pricePerMinute = pricing.pricePerMinuteClp
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
   const [locationDenied, setLocationDenied] = useState(false)
@@ -54,7 +56,7 @@ export default function MapScreen() {
   const locationSub = useRef<Location.LocationSubscription | null>(null)
 
   const initial = user?.name?.[0]?.toUpperCase() ?? '?'
-  const totalPrice = Math.round((elapsed / 60) * pricePerMinute)
+  const totalPrice = calculateTripCost(elapsed, pricing).total
   const showLowBalanceBanner = !activeTrip && balance < MIN_BALANCE_FOR_BANNER
 
   useEffect(() => {
@@ -339,7 +341,7 @@ export default function MapScreen() {
               <Text style={styles.btnPrimaryText}>Desbloquear</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.tariff}>Tarifa: ${pricePerMinute}/min</Text>
+          <Text style={styles.tariff}>Tarifa: ${pricePerMinute}/min + IVA</Text>
         </View>
       )}
 
@@ -358,7 +360,7 @@ export default function MapScreen() {
             <View style={styles.scooterInfo}>
               <Text style={styles.scooterName}>{activeTrip.scooterCode ?? `Scooter #${activeTrip.scooterId}`}</Text>
               <Text style={styles.scooterAddress}>
-                Total hasta ahora: <Text style={styles.totalAmount}>${totalPrice.toLocaleString('es-CL')}</Text>
+                Total hasta ahora (IVA incl.): <Text style={styles.totalAmount}>${totalPrice.toLocaleString('es-CL')}</Text>
               </Text>
               <View style={styles.scooterPills}>
                 <View style={styles.pill}>

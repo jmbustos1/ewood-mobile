@@ -30,6 +30,9 @@ export default function SummaryScreen() {
   const iva = lastSummary?.taxAmount ?? 0
   const total = lastSummary?.total ?? trip?.costAmount ?? 0
   const ivaPct = Math.round((lastSummary?.taxRate ?? 0.19) * 100)
+  const minutesCharged = lastSummary?.minutesCharged
+  const pricePerMinute = lastSummary?.pricePerMinute
+  const hasBreakdown = total > 0 && minutesCharged != null && pricePerMinute != null
   const pendingPayment = total > 0 && !trip?.costAmount
 
   function handlePay() {
@@ -82,6 +85,15 @@ export default function SummaryScreen() {
 
         <View style={styles.section}>
           <Row label="Arrendado" value={total > 0 ? 'Sí' : 'No'} />
+          {hasBreakdown && (
+            <>
+              <Row
+                label="Tiempo cobrado"
+                value={`${minutesCharged} min × $${Math.round(pricePerMinute!).toLocaleString('es-CL')}`}
+              />
+              <Row label="Subtotal (neto)" value={`$${Math.round(subtotal).toLocaleString('es-CL')}`} />
+            </>
+          )}
           <Row
             label={`IVA(${ivaPct}%)`}
             value={total > 0 ? `$${Math.round(iva).toLocaleString('es-CL')}` : '-'}

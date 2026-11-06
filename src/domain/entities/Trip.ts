@@ -23,6 +23,8 @@ export interface TripSummary {
   trip: Trip
   durationFormatted: string   // "12:34"
   distanceFormatted: string   // "2.4 km"
+  minutesCharged?: number     // minutos cobrados (ceil de la duración)
+  pricePerMinute?: number     // tarifa neta aplicada al viaje
   subtotal?: number           // monto neto (sin IVA)
   taxAmount?: number          // IVA aplicado
   taxRate?: number            // tasa de IVA (0.19 = 19%)
