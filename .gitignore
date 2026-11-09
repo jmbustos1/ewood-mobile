@@ -50,3 +50,6 @@ keystore.env
 
 # Claude skills locales
 .claude/
+
+# Deuda técnica: vive en el repo privado exwood-bitacora (enlace simbólico)
+TECH_DEBT.md
